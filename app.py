@@ -19,12 +19,19 @@ def restaurants():
 
 @app.route('/restaurant/<int:restaurant_id>/')
 def restaurantMenu(restaurant_id):
+
     return 'List specific restaurant Menu'
 
 
-@app.route('/restaurant/new/')
+@app.route('/restaurant/new/', methods=['GET', 'POST'])
 def newRestaurant():
-    return 'create new restaurant'
+    if request.method == 'POST':
+        restaurant = Restaurant(name=request.form['restaurantName'])
+        session.add(restaurant)
+        session.commit()
+        return redirect(url_for('restaurants'))
+    else:
+        return render_template('newRestaurant.html')
 
 
 @app.route('/restaurant/<int:restaurant_id>/edit/')
